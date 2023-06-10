@@ -51,6 +51,18 @@ export default function AllEntities() {
                                             <Typography>Apellidos: { e.person?.surname } </Typography>
                                         </div>
                                     </div>
+                                    {
+                                        e.commPlaces && e.commPlaces.length && (
+                                            <div>
+                                                <div>
+                                                    <Typography>Comedores: {e.commPlaces.filter(cp => cp.type === 'community kitchen').length}</Typography>
+                                                </div>
+                                                <div>
+                                                    <Typography>Economatos: {e.commPlaces.filter(cp => cp.type === 'company store').length}</Typography>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
                                 </div>)}
                             />
                             <Modal

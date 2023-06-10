@@ -8,6 +8,7 @@ export interface Entity {
     nif: string;
     applicableRate: 0.5 | 0.75 | 2.5;
     person?: EntityResponsiblePerson;
+    commPlaces?: CommPlace[];
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date;
