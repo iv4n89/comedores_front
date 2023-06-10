@@ -3,7 +3,7 @@ import { Controller, FieldValues, UseFormSetValue } from 'react-hook-form'
 import { InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent } from '@mui/material';
 import { Col, Row } from '@nextui-org/react';
 import { FormControlBox } from '@/components/boxes/FormControlBox';
-import { City, Province, State } from '@/interfaces/user.interface';
+import { Address, City, Province, State } from '@/interfaces/user.interface';
 import { ObjectUtil } from '@/util/objectUtils';
 import stateApi from '@/api/state.api';
 import provinceApi from '@/api/province.api';
@@ -14,9 +14,10 @@ interface Props {
     control: any;
     watch: any;
     setValue?: UseFormSetValue<FieldValues>;
+    defaultValue?: Partial<Address>;
 }
 
-export const AddressInfo = ({ control, watch, setValue }: Props) => {
+export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) => {
 
     return (
         <div className='w-full'>
@@ -43,6 +44,7 @@ export const AddressInfo = ({ control, watch, setValue }: Props) => {
                                                 sx={{
                                                     width: '235px'
                                                 }}
+                                                defaultValue={defaultValue?.addrType}
                                             >
                                                 <MenuItem value='calle'>Calle</MenuItem>
                                                 <MenuItem value='plaza'>Plaza</MenuItem>
@@ -67,6 +69,7 @@ export const AddressInfo = ({ control, watch, setValue }: Props) => {
                                                 label='Nombre de Calle'
                                                 color='secondary'
                                                 {...field}
+                                                defaultValue={defaultValue?.streetName}
                                             />
                                         )
                                     }
@@ -86,6 +89,7 @@ export const AddressInfo = ({ control, watch, setValue }: Props) => {
                                                 label='Número'
                                                 color='secondary'
                                                 {...field}
+                                                defaultValue={defaultValue?.streetNumber}
                                             />
                                         )
                                     }
@@ -106,6 +110,7 @@ export const AddressInfo = ({ control, watch, setValue }: Props) => {
                                                 label='Planta'
                                                 color='secondary'
                                                 {...field}
+                                                defaultValue={defaultValue?.floor}
                                             />
                                         )
                                     }
@@ -125,6 +130,7 @@ export const AddressInfo = ({ control, watch, setValue }: Props) => {
                                                 label='Puerta'
                                                 color='secondary'
                                                 {...field}
+                                                defaultValue={defaultValue?.door}
                                             />
                                         )
                                     }
@@ -146,6 +152,7 @@ export const AddressInfo = ({ control, watch, setValue }: Props) => {
                                                 multiline
                                                 rows={4}
                                                 {...field}
+                                                defaultValue={defaultValue?.extraInfo}
                                             />
                                         )
                                     }
