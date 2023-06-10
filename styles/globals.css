@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    background-image: url(https://img.freepik.com/vector-gratis/manchas-color-saturadas-multicolores-creativas-degradado-borroso-arte-imagen-fondo-desenfoque-malla-vector_90220-940.jpg?w=1480&t=st=1686165432~exp=1686166032~hmac=4c22bc2f1cdc09dbda7ded45e4f39063f1a5ac0b2e754b53a833a1c8a197544a);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
