@@ -1,3 +1,4 @@
+import { CommPlace } from "./entity.interface";
 
 
 export interface User {
@@ -8,6 +9,7 @@ export interface User {
     identityDoc?: IdentityDoc;
     address?: Address;
     places?: number[];
+    commPlaces?: CommPlace[];
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date;

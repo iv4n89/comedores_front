@@ -1,7 +1,7 @@
 import userApi from "@/api/user.api";
 import { Layout } from "@/base/Layout";
 import { User } from "@/interfaces/user.interface";
-import { Typography } from "@mui/material";
+import { Chip, Typography } from "@mui/material";
 import { Card, Container, Grid } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
@@ -65,11 +65,22 @@ export default function AllUsers() {
                                             </div>
                                         </div>
                                         {
-                                            user.places?.length && (
+                                            user.commPlaces?.length && (
+                                                <>
                                                 <div className="pt-2">
-                                                    <Typography>Comedor:</Typography>
+                                                    <Typography>Comedor: </Typography>
+                                                    <Typography>
+                                                        {user.commPlaces.find(cp => cp.type === 'community kitchen')?.name ?? ''}
+                                                    </Typography>
                                                 </div>
-                                            ) || <pre>{JSON.stringify(user, null, 2)}</pre>
+                                                <div className="pt-2">
+                                                    <Typography>Economato: </Typography>
+                                                    <Typography>
+                                                        {user.commPlaces.find(cp => cp.type === 'company store')?.name ?? ''}
+                                                    </Typography>
+                                                </div>
+                                                </>
+                                            ) || null
                                         }
                                     </Card.Body>
                                 </Card>
