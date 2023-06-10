@@ -2,7 +2,7 @@ import { Address } from "./user.interface";
 
 
 export interface Entity {
-    id?: number;
+    id: number;
     identifier: string;
     name: string;
     nif: string;

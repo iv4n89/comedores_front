@@ -1,14 +1,15 @@
+import commPlaceApi from '@/api/commPlace.api';
 import entityApi from '@/api/entity.api';
 import { Layout } from '@/base/Layout';
 import { FormControlBox } from '@/components/boxes/FormControlBox';
 import { RoundedBox } from '@/components/boxes/RoundedBox';
 import { TabPanel } from '@/components/tabs/TabPanel';
-import { Entity } from '@/interfaces/entity.interface';
+import { CommPlace, Entity } from '@/interfaces/entity.interface';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, InputLabel, MenuItem, Select, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { Box, Chip, InputLabel, MenuItem, Select, Tab, Tabs, TextField, Typography } from '@mui/material';
 import { Col, Container, Radio, Row } from '@nextui-org/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -16,18 +17,39 @@ export default function EntidadRegister() {
 
     const [tab, setTab] = useState(0);
     const [addPlaces, setAddPlaces] = useState(false);
+    const [places, setPlaces] = useState([] as CommPlace[]);
+    const [comedores, setComedores] = useState([] as number[]);
+    const [economatos, setEconomatos] = useState([] as number[]);
     const { control, handleSubmit, watch, formState: { errors, isDirty } } = useForm();
     const { push } = useRouter();
     const onSubmitTest = (data: any) => console.log(data);
     const onSubmit = async (data: any) => {
-        await entityApi.createEntity({
+        const entity = await entityApi.createEntity({
             ...data,
-            applicableRate: Number(data.applicableRate) as any
+            applicableRate: Number(data.applicableRate) as any,
         });
+        if (addPlaces) {
+            let _places: number[] = []
+            if (comedores.length) {
+                _places = [..._places, ...comedores];
+            }
+
+            if (economatos.length) {
+                _places = [..._places, ...economatos];
+            }
+
+            for (const pl of _places) {
+                await commPlaceApi.updatePlace(pl, { entity: [entity.id as any] });
+            }
+        }
         push({
             pathname: '/entidad/all'
         });
     }
+
+    useEffect(() => {
+        commPlaceApi.getAllPlaces().then(setPlaces);
+    }, [])
 
     return (
         <Layout>
@@ -218,7 +240,118 @@ export default function EntidadRegister() {
                                         </FormControlBox>
                                     </Col>
                                         <FormControlBox>
-                                            
+                                            <InputLabel id='pla-id'>Comedores</InputLabel>
+                                            <Controller
+                                                control={control}
+                                                name='places'
+                                                rules={{ required: false }}
+                                                render={
+                                                    ({field}) => (
+                                                        <Select
+                                                            {...field}
+                                                            label='Comedores'
+                                                            labelId='pla-id'
+                                                            displayEmpty
+                                                            color='secondary'
+                                                            fullWidth
+                                                            multiple
+                                                            value={comedores}
+                                                            onChange={(e) => setComedores(e.target.value as number[])}
+                                                            sx={{
+                                                                width: '235px'
+                                                            }}
+                                                            renderValue={(selected) => (
+                                                                <Box
+                                                                    sx={{
+                                                                        display: 'flex',
+                                                                        flexWrap: 'wrap',
+                                                                        gap: 0.5
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        selected.map(value => (
+                                                                            <Chip
+                                                                                key={value}
+                                                                                label={places.find(pl => pl.id === value)?.name}
+                                                                            />
+                                                                        ))
+                                                                    }
+                                                                </Box>
+                                                            )}
+                                                        >
+                                                            {
+                                                                places
+                                                                    .filter(pl => pl.type === 'community kitchen')
+                                                                    .map(pl => (
+                                                                        <MenuItem
+                                                                            key={pl.id}
+                                                                            value={pl.id}
+                                                                        >
+                                                                            {pl.name}
+                                                                        </MenuItem>
+                                                                    ))
+                                                            }
+                                                        </Select>
+                                                    )
+                                                }
+                                            />
+                                        </FormControlBox>
+                                        <FormControlBox>
+                                            <InputLabel id='pla2-id'>Economatos</InputLabel>
+                                            <Controller
+                                                control={control}
+                                                name='places'
+                                                rules={{ required: false }}
+                                                render={
+                                                    ({field}) => (
+                                                        <Select
+                                                            {...field}
+                                                            label='Economatos'
+                                                            labelId='pla2-id'
+                                                            displayEmpty
+                                                            color='secondary'
+                                                            fullWidth
+                                                            multiple
+                                                            value={economatos}
+                                                            onChange={(e) => setEconomatos(e.target.value as number[])}
+                                                            sx={{
+                                                                width: '235px'
+                                                            }}
+                                                            renderValue={(selected) => (
+                                                                <Box
+                                                                    sx={{
+                                                                        display: 'flex',
+                                                                        flexWrap: 'wrap',
+                                                                        gap: 0.5
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        selected.map(value => (
+                                                                            <Chip
+                                                                                key={value}
+                                                                                label={places.find(pl => pl.id === value)?.name}
+                                                                            />
+                                                                        ))
+                                                                    }
+                                                                </Box>
+                                                            )}
+                                                        >
+                                                            {
+                                                                places
+                                                                    .filter(pl => pl.type === 'company store')
+                                                                    .map(pl => (
+                                                                        <MenuItem
+                                                                            key={pl.id}
+                                                                            value={pl.id}
+                                                                        >
+                                                                            {pl.name}
+                                                                        </MenuItem>
+                                                                    ))
+                                                            }
+                                                        </Select>
+                                                    )
+                                                }
+                                            />
                                         </FormControlBox>
                                     <Col>
                                     </Col>
