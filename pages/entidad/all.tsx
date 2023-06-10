@@ -69,6 +69,8 @@ export default function AllEntities() {
                                 closeButton
                                 open={modalOpen}
                                 onClose={() => setModalOpen(false)}
+                                blur
+                                width='75vw'
                             >
                                 <Modal.Header>
                                     <Text b size={10}>
