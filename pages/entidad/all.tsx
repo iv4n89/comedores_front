@@ -61,7 +61,7 @@ export default function AllEntities() {
                                                     <Typography>Economatos: {e.commPlaces.filter(cp => cp.type === 'company store').length}</Typography>
                                                 </div>
                                             </div>
-                                        )
+                                        ) || null
                                     }
                                 </div>)}
                             />
