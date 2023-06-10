@@ -296,7 +296,9 @@ export default function EntidadRegister() {
                                                 }
                                             />
                                         </FormControlBox>
-                                        <FormControlBox>
+                                        <FormControlBox
+                                            hidden={!addPlaces}
+                                        >
                                             <InputLabel id='pla2-id'>Economatos</InputLabel>
                                             <Controller
                                                 control={control}
