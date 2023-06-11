@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import HTMLString from 'react-html-string';
 
 
-export default function ({ }) {
+export default function EnterBeneficiaryIndex({ }) {
 
     const [users, setUsers] = useState([] as User[]);
     const [loaded, setLoaded] = useState(false);
