@@ -10,11 +10,15 @@ const getOneUser = (id: number) => api.get<User>(`${ basePath }/${ id }`).then(r
 const createUser = (user: User) => api.post<any>(basePath, user).then(res => res).catch(console.log);
 const updateUser = (id: number, user: User) => api.patch<User>(`${ basePath }/${ id }`, user).then(res => res.data);
 const deleteUser = (id: number) => api.delete(`${ basePath }/${ id }`).then(res => res.data);
+const getQr = (id: number) => api.get(`${basePath}/qr/${id}`).then(res => res.data);
+const attemptEnter = (id: number, placeId: number) => api.get(`${basePath}/enter/place/${placeId}/${id}`).then(res => res.data);
 
 export default {
     getAllUsers,
     getOneUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getQr,
+    attemptEnter,
 }

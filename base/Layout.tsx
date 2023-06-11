@@ -204,7 +204,19 @@ export const Layout = ({ children }: Props) => {
                             style={{
                                 color: 'white'
                             }}
-                        > Inciar Sesión </Navbar.Link>
+                        > 
+                            Inciar Sesión 
+                        </Navbar.Link>
+                        <Navbar.Link
+                            href='/enter-beneficiary'
+                            activeColor='success'
+                            variant='highlight-solid'
+                            style={{
+                                color: 'white'
+                            }}
+                        >
+                            Entrada beneficiario
+                        </Navbar.Link>
                     </Navbar.Content>
                 </Navbar>
                 <Container maxWidth='md' className='pt-5' style={{
