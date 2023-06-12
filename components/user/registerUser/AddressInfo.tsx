@@ -1,14 +1,9 @@
-import React, { use, useEffect, useState } from 'react'
-import { Controller, FieldValues, UseFormSetValue } from 'react-hook-form'
-import { InputLabel, MenuItem, Select, TextField, FormControl, SelectChangeEvent } from '@mui/material';
-import { Col, Row } from '@nextui-org/react';
-import { FormControlBox } from '@/components/boxes/FormControlBox';
-import { Address, City, Province, State } from '@/interfaces/user.interface';
-import { ObjectUtil } from '@/util/objectUtils';
-import stateApi from '@/api/state.api';
-import provinceApi from '@/api/province.api';
-import cityApi from '@/api/city.api';
 import { AddressSelects } from '@/components/address/AddressSelects';
+import { FormControlBox } from '@/components/boxes/FormControlBox';
+import { Address } from '@/interfaces/user.interface';
+import { InputLabel, Select, TextField } from '@mui/material';
+import { Col } from '@nextui-org/react';
+import { Controller, FieldValues, UseFormSetValue } from 'react-hook-form';
 
 interface Props {
     control: any;
@@ -17,6 +12,11 @@ interface Props {
     defaultValue?: Partial<Address>;
 }
 
+const options = ['calle','plaza','via','paseo'].map(e => ({
+    value: e,
+    label: e.charAt(0).toUpperCase() + e.substring(1),
+}));
+
 export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) => {
 
     return (
@@ -24,7 +24,7 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
             <div className="mb-3">
                 <div className='flex gap-5 justify-evenly'>
                     <Col>
-                        <AddressSelects control={control} watch={watch} setValue={setValue} />
+                        <AddressSelects control={control} watch={watch} setValue={setValue} defaultValue={defaultValue} />
                     </Col>
                     <Col>
                         <FormControlBox>
@@ -39,6 +39,7 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
                                                 label='Tipo de vía'
                                                 labelId='dir-type'
                                                 {...field}
+                                                native
                                                 fullWidth
                                                 color='secondary'
                                                 sx={{
@@ -46,11 +47,11 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
                                                 }}
                                                 defaultValue={defaultValue?.addrType}
                                             >
-                                                <MenuItem value='calle'>Calle</MenuItem>
-                                                <MenuItem value='plaza'>Plaza</MenuItem>
-                                                <MenuItem value='via'>Vía</MenuItem>
-                                                <MenuItem value='paseo'>Paseo</MenuItem>
-
+                                                {
+                                                    options.map(e => (
+                                                        <option value={e.value}> { e.label } </option>
+                                                    ))
+                                                }
                                             </Select>
                                         )
                                     }

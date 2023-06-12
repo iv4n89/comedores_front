@@ -11,16 +11,35 @@ interface Props {
     control: any;
     watch: any;
     setValue?: UseFormSetValue<FieldValues>;
+    defaultValue?: any;
 }
 
-export const AddressSelects = ({ control, watch, setValue }: Props) => {
+export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props) => {
 
     const [states, setStates] = useState<State[]>([] as State[]);
     const [provinces, setProvinces] = useState<Province[]>([] as Province[]);
     const [cities, setCities] = useState<City[]>([] as City[]);
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
-        stateApi.getAllStates().then(setStates);
+        const func = async () => {
+            const _states = await stateApi.getAllStates();
+            setStates(_states);
+            if (defaultValue) {
+                if (defaultValue?.state) {
+                    const _provinces = await provinceApi.getProvincesByState(defaultValue?.state?.id);
+                    setProvinces(_provinces);
+                }
+                if (defaultValue?.province) {
+                    const _cities = await cityApi.getCitiesByProvince(defaultValue?.province?.id);
+                    setCities(_cities);
+                }
+                setLoaded(true);
+            } else {
+                setLoaded(true);
+            }
+        }
+        func();
     }, [])
 
     useEffect(() => {
@@ -35,26 +54,7 @@ export const AddressSelects = ({ control, watch, setValue }: Props) => {
         }
     }, [watch()?.address?.province])
 
-    useEffect(() => {
-        const city = cities.find(c => c.id == watch()?.address?.city);
-        const postalCode = city?.postalCode?.split(',')?.find(c => Number(c) > 10000);
-        !!setValue && setValue('address.postalCode', postalCode);
-    }, [watch()?.address?.city])
-
-    useEffect(() => {
-        if (Number(watch()?.address?.postalCode) > 10000) {
-            const city: City | undefined = cities?.find(c => !!c.postalCode.length && c.postalCode.split(',').includes(watch()?.address?.postalCode));
-            const province: Province | undefined = city?.province;
-            const state: State | undefined = province?.state;
-            !!state && provinceApi.getProvincesByState(state?.id).then(setProvinces);
-            !!province && cityApi.getCitiesByProvince(province?.id).then(setCities);
-            !!setValue && setValue('address.state', state?.id);
-            !!setValue && setValue('address.province', province?.id);
-            !!setValue && setValue('address.city', city?.id);
-        }
-    }, [watch()?.address?.postalCode])
-
-    return (
+    return loaded && (
         <>
             <FormControlBox>
                 <InputLabel id='comun_id'>Comunidad Autónoma</InputLabel>
@@ -68,16 +68,18 @@ export const AddressSelects = ({ control, watch, setValue }: Props) => {
                                 {...field}
                                 color='secondary'
                                 fullWidth
+                                native
                                 label='Comunidad Autónoma'
                                 labelId='comun_id'
                                 displayEmpty
+                                defaultValue={defaultValue?.address?.state?.id}
                                 sx={{
                                     width: '235px'
                                 }}
                             >
                                 {
                                     states.map(st => (
-                                        <MenuItem key={st.id} value={st.id}>{st.name}</MenuItem>
+                                        <option key={st.id} value={st.id}>{st.name}</option>
                                     ))
                                 }
                             </Select>
@@ -97,16 +99,18 @@ export const AddressSelects = ({ control, watch, setValue }: Props) => {
                                 {...field}
                                 color='secondary'
                                 fullWidth
+                                native
                                 label='Provincia'
                                 labelId="prov_id"
                                 displayEmpty
+                                defaultValue={defaultValue?.address?.province?.id}
                                 sx={{
                                     width: '235px'
                                 }}
                             >
                                 {
                                     provinces.map(prov => (
-                                        <MenuItem key={prov.id} value={prov.id}>{prov.name}</MenuItem>
+                                        <option key={prov.id} value={prov.id}>{prov.name}</option>
                                     ))
                                 }
                             </Select>
@@ -126,16 +130,18 @@ export const AddressSelects = ({ control, watch, setValue }: Props) => {
                                 {...field}
                                 color='secondary'
                                 fullWidth
+                                native
                                 label='Ciudad'
                                 labelId="cit_id"
                                 displayEmpty
+                                defaultValue={defaultValue?.address?.city?.id}
                                 sx={{
                                     width: '235px'
                                 }}
                             >
                                 {
                                     cities.map(cit => (
-                                        <MenuItem key={cit.id} value={cit.id}>{cit.name}</MenuItem>
+                                        <option key={cit.id} value={cit.id}>{cit.name}</option>
                                     ))
                                 }
                             </Select>
@@ -154,7 +160,7 @@ export const AddressSelects = ({ control, watch, setValue }: Props) => {
                                 {...field}
                                 color='secondary'
                                 label='Código postal'
-                                focused
+                                defaultValue={defaultValue?.address?.postalCode}
                             />
                         )
                     }
@@ -162,5 +168,5 @@ export const AddressSelects = ({ control, watch, setValue }: Props) => {
 
             </FormControlBox>
         </>
-    )
+    ) || <></>
 }

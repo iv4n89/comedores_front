@@ -4,9 +4,10 @@ import { InputLabel, MenuItem, Select, TextField, FormControl } from '@mui/mater
 
 interface Props {
     control: any;
+    defaultValue?: any;
 }
 
-export const PersonalInfo = ({ control }: Props) => {
+export const PersonalInfo = ({ control, defaultValue }: Props) => {
 
     return (
         <div className='w-full'>
@@ -20,7 +21,7 @@ export const PersonalInfo = ({ control }: Props) => {
                             render={
                                 ({ field }) => {
                                     return (
-                                        <TextField label='Nombre' color='secondary' {...field} />
+                                        <TextField label='Nombre' color='secondary' {...field} defaultValue={defaultValue?.name} />
                                     );
                                 }
                             }
@@ -34,7 +35,12 @@ export const PersonalInfo = ({ control }: Props) => {
                             render={
                                 ({ field }) => {
                                     return (
-                                        <TextField label='Apellidos' color='secondary' {...field} />
+                                        <TextField 
+                                            label='Apellidos' 
+                                            color='secondary' 
+                                            {...field} 
+                                            defaultValue={defaultValue?.surname}
+                                        />
                                     )
                                 }
                             }
@@ -47,7 +53,7 @@ export const PersonalInfo = ({ control }: Props) => {
                             rules={{ required: true }}
                             render={
                                 ({ field }) => {
-                                    return <TextField label='Teléfono' color='secondary' {...field} />
+                                    return <TextField label='Teléfono' color='secondary' {...field} defaultValue={defaultValue?.telNumber} />
                                 }
                             }
                         ></Controller>
@@ -71,6 +77,7 @@ export const PersonalInfo = ({ control }: Props) => {
                                                 label='Tipo de documento'
                                                 labelId='doc-type'
                                                 displayEmpty
+                                                defaultValue={defaultValue?.identityDoc?.docType}
                                                 sx={{
                                                     width: '235px'
                                                 }}
@@ -92,7 +99,7 @@ export const PersonalInfo = ({ control }: Props) => {
                                 render={
                                     ({ field }) => {
                                         return (
-                                            <TextField label='Número de documento' color='secondary' {...field} />
+                                            <TextField label='Número de documento' color='secondary' {...field} defaultValue={defaultValue?.identiyDoc?.idNumber} />
                                         )
                                     }
                                 }

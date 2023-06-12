@@ -1,12 +1,11 @@
 import userApi from "@/api/user.api";
 import { Layout } from "@/base/Layout";
-import { FormControlBox } from "@/components/boxes/FormControlBox";
-import { AddressInfo } from "@/components/user/registerUser/AddressInfo";
+import { UserForm } from "@/components/user/registerUser/UserForm";
 import { User } from "@/interfaces/user.interface";
-import { Chip, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Card, Container, Grid, Modal, Text } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 
 export default function AllUsers() {
@@ -18,13 +17,6 @@ export default function AllUsers() {
     useEffect(() => {
         userApi.getAllUsers().then(setUsers);
     }, []);
-
-    const onsubmit = (data: any) => {
-        userApi.updateUser(editUser.id!, data).then(res => {
-            setUsers(elements => elements.map(e => e.id === editUser.id ? res : e));
-            setModalOpen(false);
-        })
-    }
 
     return (
         <Layout>
@@ -114,99 +106,14 @@ export default function AllUsers() {
                                         </Text>
                                     </Modal.Header>
                                     <Modal.Body>
-                                        <form onSubmit={handleSubmit(onsubmit)}>
-                                            <FormControlBox>
-                                                <Controller
-                                                    control={control}
-                                                    name='name'
-                                                    render={
-                                                        ({ field }) => (
-                                                            <TextField
-                                                                {...field}
-                                                                color='secondary'
-                                                                label='Nombre'
-                                                                defaultValue={editUser.name}
-                                                            />
-                                                        )
-                                                    }
-                                                />
-                                            </FormControlBox>
-                                            <FormControlBox>
-                                                <Controller
-                                                    control={control}
-                                                    name='surname'
-                                                    render={
-                                                        ({ field }) => (
-                                                            <TextField
-                                                                {...field}
-                                                                color='secondary'
-                                                                label='Apellidos'
-                                                                defaultValue={editUser.surname}
-                                                            />
-                                                        )
-                                                    }
-                                                />
-                                            </FormControlBox>
-                                            <FormControlBox>
-                                                <Controller
-                                                    control={control}
-                                                    name='telNumber'
-                                                    render={
-                                                        ({ field }) => (
-                                                            <TextField
-                                                                {...field}
-                                                                color='secondary'
-                                                                label='Teléfono'
-                                                                defaultValue={editUser.telNumber}
-                                                            />
-                                                        )
-                                                    }
-                                                />
-                                            </FormControlBox>
-                                            <FormControlBox>
-                                                <InputLabel id='doc-id'>Tipo de identificador: </InputLabel>
-                                                <Controller
-                                                    control={control}
-                                                    name='identityDoc.docType'
-                                                    render={
-                                                        ({ field }) => (
-                                                            <Select
-                                                                {...field}
-                                                                color='secondary'
-                                                                fullWidth
-                                                                label='Tipo de documento'
-                                                                labelId='doc-type'
-                                                                displayEmpty
-                                                                sx={{
-                                                                    width: '235px'
-                                                                }}
-                                                            >
-                                                                <MenuItem value='DNI'> DNI </MenuItem>
-                                                                <MenuItem value='NIE'> NIE </MenuItem>
-                                                                <MenuItem value='Passport'> Pasaporte </MenuItem>
-                                                            </Select>
-                                                        )
-                                                    }
-                                                />
-                                            </FormControlBox>
-                                            <FormControlBox>
-                                                <Controller
-                                                    control={control}
-                                                    name='indentityDoc.idNumber'
-                                                    render={
-                                                        ({ field }) => (
-                                                            <TextField
-                                                                {...field}
-                                                                color='secondary'
-                                                                label='Número de documento'
-                                                                defaultValue={editUser.identityDoc?.idNumber}
-                                                            />
-                                                        )
-                                                    }
-                                                />
-                                            </FormControlBox>
-                                            <AddressInfo control={control} watch={watch} key={editUser.id} defaultValue={editUser.address} />
-                                        </form>
+                                        <UserForm
+                                            type='update'
+                                            defaultValue={editUser}
+                                            callBack={() => {
+                                                setModalOpen(false);
+                                                userApi.getAllUsers().then(setUsers);
+                                            }}
+                                        />
                                     </Modal.Body>
                                 </Modal>
                             </Grid>
