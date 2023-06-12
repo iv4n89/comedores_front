@@ -6,6 +6,11 @@ import { Button, Card, Col, Container, Grid, Modal, Row, Text } from "@nextui-or
 import { useEffect, useState } from "react";
 import HTMLString from 'react-html-string';
 
+type EnterAttempt = {
+    canEnter: boolean;
+    timeToPass?: string;
+}
+
 
 export default function EnterBeneficiaryIndex({ }) {
 
@@ -14,7 +19,7 @@ export default function EnterBeneficiaryIndex({ }) {
     const [qr, setQr] = useState([] as { id: number, qr: string }[]);
     const [modalOpen, setModalOpen] = useState(false);
     const [userToView, setUserToView] = useState({} as any);
-    const [enterAttempt, setEnterAttempt] = useState({} as { canEnter: boolean, timeToPass?: string });
+    const [enterAttempt, setEnterAttempt] = useState({} as EnterAttempt);
 
     useEffect(() => {
         userApi.getAllUsers().then(setUsers);
@@ -74,8 +79,11 @@ export default function EnterBeneficiaryIndex({ }) {
                             <Modal
                                 open={modalOpen}
                                 closeButton
-                                onClose={() => setModalOpen(false)}
-                                width='75vw'
+                                onClose={() => {
+                                    setModalOpen(false);
+                                    setEnterAttempt({} as EnterAttempt);
+                                }}
+                                width='1000px'
                                 blur
                             >
                                 <Modal.Header>
@@ -91,8 +99,8 @@ export default function EnterBeneficiaryIndex({ }) {
                                             </Col>
                                             <Col>
                                                 <Button
-                                                    onClick={() => attemptEnter(u.id, u.commPlaces?.find(p => p.type === 'community kitchen')?.id as number)}
-                                                    hidden={!u.commPlaces?.some(p => p.type === 'community kitchen')}
+                                                    onClick={() => attemptEnter(userToView.id, userToView.commPlaces?.find((p: any) => p.type === 'community kitchen')?.id as number)}
+                                                    hidden={!userToView.commPlaces?.some((p: any) => p.type === 'community kitchen')}
                                                     color='success'
                                                     className="mb-3"
                                                     shadow
@@ -100,8 +108,8 @@ export default function EnterBeneficiaryIndex({ }) {
                                                     <Text>Simular lectura de QR de comedor</Text>
                                                 </Button>
                                                 <Button
-                                                    onClick={() => attemptEnter(u.id, u.commPlaces?.find(p => p.type === 'company store')?.id as number)}
-                                                    hidden={!u.commPlaces?.some(p => p.type === 'company store')}
+                                                    onClick={() => attemptEnter(userToView.id, userToView.commPlaces?.find((p: any) => p.type === 'company store')?.id as number)}
+                                                    hidden={!userToView.commPlaces?.some((p: any) => p.type === 'company store')}
                                                     shadow
                                                 >
                                                     Simular lectura de QR de economato
