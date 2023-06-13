@@ -22,7 +22,9 @@ export const PersonalInfo = ({ control, defaultValue, setValue, watch }: Props) 
         <div className='w-full'>
             <div className='flex gap-5 justify-evenly'>
                 <div className='flex flex-col'>
-                    <FormControl className='mb-3 mt-2'>
+                    <FormControl style={{
+                        marginBottom: '10px',
+                    }}>
                         <Controller
                             control={control}
                             name='name'
@@ -36,7 +38,9 @@ export const PersonalInfo = ({ control, defaultValue, setValue, watch }: Props) 
                             }
                         ></Controller>
                     </FormControl>
-                    <FormControl className="mb-3">
+                    <FormControl style={{
+                        marginBottom: '10px'
+                    }}>
                         <Controller
                             control={control}
                             name='surname'
@@ -55,7 +59,9 @@ export const PersonalInfo = ({ control, defaultValue, setValue, watch }: Props) 
                             }
                         ></Controller>
                     </FormControl>
-                    <FormControl className="mb-3">
+                    <FormControl style={{
+                        marginBottom: '10px'
+                    }}>
                         <Controller
                             control={control}
                             name='telNumber'
