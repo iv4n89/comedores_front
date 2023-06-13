@@ -29,7 +29,9 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
                     </Col>
                     <Col>
                         <div className="flex flex-col">
-                            <FormControlBox>
+                            <FormControlBox rowStyle={{
+                                marginBottom: '10px'
+                            }}>
                                 <Controller
                                     control={control}
                                     name='address.addrType'
@@ -58,7 +60,9 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
                                     }
                                 ></Controller>
                             </FormControlBox>
-                            <FormControlBox>
+                            <FormControlBox rowStyle={{
+                                marginBottom: '10px'
+                            }}>
                                 <Controller
                                     control={control}
                                     name='address.streetName'
@@ -77,7 +81,9 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
                                     }
                                 ></Controller>
                             </FormControlBox>
-                            <FormControlBox>
+                            <FormControlBox rowStyle={{
+                                marginBottom: '10px'
+                            }}>
                                 <Controller
                                     control={control}
                                     name='address.streetNumber'
