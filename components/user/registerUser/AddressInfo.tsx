@@ -101,7 +101,9 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
                     </Col>
                     <Col className='mt-2'>
                         <div className="flex flex-col">
-                            <FormControlBox>
+                            <FormControlBox rowStyle={{
+                                marginBottom: '10px'
+                            }}>
                                 <Controller
                                     control={control}
                                     name='address.floor'
@@ -120,7 +122,9 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
                                     }
                                 ></Controller>
                             </FormControlBox>
-                            <FormControlBox>
+                            <FormControlBox rowStyle={{
+                                marginBottom: '10px'
+                            }}>
                                 <Controller
                                     control={control}
                                     name='address.door'
@@ -140,7 +144,9 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
                                     }
                                 ></Controller>
                             </FormControlBox>
-                            <FormControlBox>
+                            <FormControlBox rowStyle={{
+                                marginBottom: '10px'
+                            }}>
                                 <Controller
                                     control={control}
                                     name='address.extraInfo'

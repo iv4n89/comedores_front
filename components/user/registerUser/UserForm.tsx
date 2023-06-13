@@ -121,7 +121,9 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                     <AddressInfo control={control} watch={watch} defaultValue={defaultValue?.address} setValue={setValue} />
                 </TabPanel>
                 <TabPanel value={tab} index={2}>
-                    <FormControlBox>
+                    <FormControlBox rowStyle={{
+                        marginBottom: '10px'
+                    }}>
                         <Controller
                             name='kitchen'
                             control={control}
@@ -150,7 +152,9 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                             }
                         />
                     </FormControlBox>
-                    <FormControlBox>
+                    <FormControlBox rowStyle={{
+                        marginBottom: '10px'
+                    }}>
                         <InputLabel id='sto-id'>Economato</InputLabel>
                         <Controller
                             name='store'

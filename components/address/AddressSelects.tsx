@@ -80,8 +80,9 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
 
     return loaded && (
         <>
-            <FormControlBox>
-                <label>Comunidad Autónoma</label>
+            <FormControlBox rowStyle={{
+                marginBottom: '10px'
+            }}>
                 <Controller
                     name='address.state'
                     control={control}
@@ -113,7 +114,9 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                     }
                 />
             </FormControlBox>
-            <FormControlBox>
+            <FormControlBox rowStyle={{
+                marginBottom: '10px'
+            }}>
                 <Controller
                     name='address.province'
                     control={control}
@@ -145,7 +148,9 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                     }
                 />
             </FormControlBox>
-            <FormControlBox>
+            <FormControlBox rowStyle={{
+                marginBottom: '10px'
+            }}>
                 <Controller
                     name='address.city'
                     control={control}
@@ -177,7 +182,9 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                     }
                 />
             </FormControlBox>
-            <FormControlBox>
+            <FormControlBox rowStyle={{
+                marginBottom: '10px'
+            }}>
                 <Controller
                     name='address.postalCode'
                     control={control}

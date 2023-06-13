@@ -75,7 +75,9 @@ export const PersonalInfo = ({ control, defaultValue, setValue, watch }: Props) 
                     </FormControl>
                 </div>
                 <div className='flex flex-col'>
-                    <FormControl className="mb-2">
+                    <FormControl style={{
+                        marginBottom: '10px'
+                    }}>
                         <div>
                             <label>Documento de identidad: </label>
                         </div>
@@ -106,7 +108,9 @@ export const PersonalInfo = ({ control, defaultValue, setValue, watch }: Props) 
                             }
                         ></Controller>
                     </FormControl>
-                    <FormControl className='mb-2'>
+                    <FormControl style={{
+                        marginBottom: '10px'
+                    }}>
                         <Controller
                             control={control}
                             name='identityDoc.idNumber'
