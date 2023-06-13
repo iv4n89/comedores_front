@@ -2,10 +2,11 @@ import cityApi from '@/api/city.api';
 import provinceApi from '@/api/province.api';
 import stateApi from '@/api/state.api';
 import { State, Province, City } from '@/interfaces/user.interface';
-import { InputLabel, Select, MenuItem, TextField } from '@mui/material';
+import { InputLabel, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { Controller, FieldValues, UseFormSetValue } from 'react-hook-form';
 import { FormControlBox } from '../boxes/FormControlBox';
+import Select from 'react-select';
 
 interface Props {
     control: any;
@@ -20,6 +21,15 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
     const [provinces, setProvinces] = useState<Province[]>([] as Province[]);
     const [cities, setCities] = useState<City[]>([] as City[]);
     const [loaded, setLoaded] = useState(false);
+    const [address, setAddress] = useState({
+        state: 0,
+        province: 0,
+        city: 0,
+    });
+
+    const statesOptions = () => states?.map(e => ({ value: e.id, label: e.name }));
+    const provincesOptions = () => provinces?.map(e => ({ value: e.id, label: e.name }));
+    const citiesOptions = () => cities?.map(e => ({ value: e.id, label: e.name }));
 
     useEffect(() => {
         const func = async () => {
@@ -29,10 +39,24 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                 if (defaultValue?.state) {
                     const _provinces = await provinceApi.getProvincesByState(defaultValue?.state?.id);
                     setProvinces(_provinces);
+                    setAddress(e => ({
+                        ...e,
+                        state: defaultValue?.state?.id,
+                    }))
                 }
                 if (defaultValue?.province) {
                     const _cities = await cityApi.getCitiesByProvince(defaultValue?.province?.id);
                     setCities(_cities);
+                    setAddress(e => ({
+                        ...e,
+                        province: defaultValue?.province?.id,
+                    }))
+                }
+                if (defaultValue?.city) {
+                    setAddress(e => ({
+                        ...e,
+                        city: defaultValue?.city?.id,
+                    }))
                 }
                 setLoaded(true);
             } else {
@@ -57,7 +81,7 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
     return loaded && (
         <>
             <FormControlBox>
-                <InputLabel id='comun_id'>Comunidad Autónoma</InputLabel>
+                <label>Comunidad Autónoma</label>
                 <Controller
                     name='address.state'
                     control={control}
@@ -66,29 +90,30 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                         ({ field }) => (
                             <Select
                                 {...field}
-                                color='secondary'
-                                fullWidth
-                                native
-                                label='Comunidad Autónoma'
-                                labelId='comun_id'
-                                displayEmpty
-                                defaultValue={defaultValue?.address?.state?.id}
-                                sx={{
-                                    width: '235px'
+                                options={statesOptions()}
+                                onChange={e => {
+                                    setValue?.('address.state', e?.value);
+                                    setAddress(a => ({
+                                        ...a,
+                                        state: e!.value,
+                                    }))
                                 }}
-                            >
-                                {
-                                    states.map(st => (
-                                        <option key={st.id} value={st.id}>{st.name}</option>
-                                    ))
-                                }
-                            </Select>
+                                value={statesOptions().find(e => e.value === address.state)}
+                                placeholder='Comunidad autónoma'
+                                className='z-50'
+                                styles={{
+                                    container: style => ({
+                                        ...style,
+                                        width: '235px'
+                                    })
+                                }}
+                                defaultValue={statesOptions().find(e => e.value === defaultValue?.address?.state?.id)}
+                            />
                         )
                     }
                 />
             </FormControlBox>
             <FormControlBox>
-                <InputLabel id='prov_id'>Provincia</InputLabel>
                 <Controller
                     name='address.province'
                     control={control}
@@ -97,29 +122,30 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                         ({ field }) => (
                             <Select
                                 {...field}
-                                color='secondary'
-                                fullWidth
-                                native
-                                label='Provincia'
-                                labelId="prov_id"
-                                displayEmpty
-                                defaultValue={defaultValue?.address?.province?.id}
-                                sx={{
-                                    width: '235px'
+                                options={provincesOptions()}
+                                onChange={e => {
+                                    setValue?.('address.province', e?.value);
+                                    setAddress(a => ({
+                                        ...a,
+                                        province: e!.value,
+                                    }))
                                 }}
-                            >
-                                {
-                                    provinces.map(prov => (
-                                        <option key={prov.id} value={prov.id}>{prov.name}</option>
-                                    ))
-                                }
-                            </Select>
+                                value={provincesOptions().find(e => e.value === address.province)}
+                                className='z-40'
+                                placeholder='Provincia'
+                                styles={{
+                                    container: style => ({
+                                        ...style,
+                                        width: '235px'
+                                    })
+                                }}
+                                defaultValue={provincesOptions().find(e => e.value === defaultValue?.address?.province?.id)}
+                            />
                         )
                     }
                 />
             </FormControlBox>
             <FormControlBox>
-                <InputLabel id='cit_id'>Ciudad</InputLabel>
                 <Controller
                     name='address.city'
                     control={control}
@@ -128,23 +154,25 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                         ({ field }) => (
                             <Select
                                 {...field}
-                                color='secondary'
-                                fullWidth
-                                native
-                                label='Ciudad'
-                                labelId="cit_id"
-                                displayEmpty
-                                defaultValue={defaultValue?.address?.city?.id}
-                                sx={{
-                                    width: '235px'
+                                options={citiesOptions()}
+                                onChange={e => {
+                                    setValue?.('address.city', e?.value);
+                                    setAddress(a => ({
+                                        ...a,
+                                        city: e!.value,
+                                    }))
                                 }}
-                            >
-                                {
-                                    cities.map(cit => (
-                                        <option key={cit.id} value={cit.id}>{cit.name}</option>
-                                    ))
-                                }
-                            </Select>
+                                value={citiesOptions().find(e => e.value === address.city)}
+                                className='z-30'
+                                placeholder='Ciudad'
+                                styles={{
+                                    container: style => ({
+                                        ...style,
+                                        width: '235px'
+                                    })
+                                }}
+                                defaultValue={citiesOptions().find(e => e.value === defaultValue?.address?.city?.id)}
+                            />
                         )
                     }
                 />
@@ -160,7 +188,7 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                                 {...field}
                                 color='secondary'
                                 label='Código postal'
-                                defaultValue={defaultValue?.address?.postalCode}
+                                defaultValue={defaultValue?.postalCode}
                             />
                         )
                     }

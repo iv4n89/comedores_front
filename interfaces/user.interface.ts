@@ -35,6 +35,7 @@ export interface Address {
     streetNumber: string;
     floor?: number;
     door?: string;
+    postalCode?: string;
     country?: Country;
     state?: State;
     province?: Province;

@@ -1,29 +1,24 @@
+import commPlaceApi from "@/api/commPlace.api";
+import entityApi from "@/api/entity.api";
 import { Layout } from "@/base/Layout";
 import { FormControlBox } from "@/components/boxes/FormControlBox";
 import { RoundedBox } from "@/components/boxes/RoundedBox";
+import { TabPanel } from '@/components/tabs/TabPanel';
+import { AddressInfo } from "@/components/user/registerUser/AddressInfo";
+import { Entity } from "@/interfaces/entity.interface";
 import { Button, Chip, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography } from "@mui/material";
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import { TabPanel } from '@/components/tabs/TabPanel';
+import { Col, Container, Radio, Row } from "@nextui-org/react";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Col, Container, Radio, Row } from "@nextui-org/react";
-import { City, Province, State } from "@/interfaces/user.interface";
-import stateApi from "@/api/state.api";
-import provinceApi from "@/api/province.api";
-import cityApi from "@/api/city.api";
-import { AddressSelects } from "@/components/address/AddressSelects";
-import { AddressInfo } from "@/components/user/registerUser/AddressInfo";
-import commPlaceApi from "@/api/commPlace.api";
-import { useRouter } from "next/router";
-import { Entity } from "@/interfaces/entity.interface";
-import entityApi from "@/api/entity.api";
 
 
 export default function ComedorRegister() {
 
-    const { register, control, watch, formState: { errors }, handleSubmit, setValue } = useForm();
+    const { register, control, watch, formState: { errors, isValid }, handleSubmit, setValue } = useForm();
     const [tab, setTab] = useState(0);
     const [addEntity, setAddEntity] = useState(false);
     const [entities, setEntities] = useState([] as Entity[]);
@@ -134,6 +129,22 @@ export default function ComedorRegister() {
                                     }
                                 />
                             </FormControlBox>
+                            <FormControlBox>
+                                <Controller
+                                    name='telephone'
+                                    control={control}
+                                    rules={{required: true}}
+                                    render={
+                                        ({ field }) => (
+                                            <TextField
+                                                {...field}
+                                                color='secondary'
+                                                label='Teléfono'
+                                            />
+                                        )
+                                    }
+                                />
+                            </FormControlBox>
                         </TabPanel>
                         <TabPanel value={tab} index={1}>
                             <AddressInfo control={control} watch={watch} setValue={setValue} />
@@ -223,13 +234,17 @@ export default function ComedorRegister() {
                         </TabPanel>
                     </Box>
                     <div>
-                        <Button
-                            variant='outlined'
-                            color="secondary"
+                        <button
                             type='submit'
+                            disabled={!isValid}
+                            className={
+                                isValid 
+                                ? `pt-2 pb-2 pl-3 pr-3 border rounded-lg text-white font-bold shadow-lg hover:bg-purple-500 active:bg-purple-400 active:translate-y-2 transition-all ease-in-out duration-200 ${Object.keys(errors).length ? ' bg-red-600 ' : 'bg-green-600 '}`
+                                : 'pt-2 pb-2 pl-3 pr-3 border rounded-lg text-white font-bold shadow-lg bg-gray-500'
+                            }
                         >
                             Enviar
-                        </Button>
+                        </button>
                     </div>
                 </form>
             </RoundedBox>

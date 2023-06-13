@@ -7,7 +7,6 @@ import { Card, Container, Grid, Modal, Text } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-
 export default function AllUsers() {
 
     const [users, setUsers] = useState([] as User[]);
@@ -36,7 +35,9 @@ export default function AllUsers() {
                                     <Card.Header
                                         style={{
                                             backgroundColor: 'lightgreen',
-                                            margin: 0
+                                            margin: 0,
+                                            display: 'flex',
+                                            justifyContent: 'space-between'
                                         }}
                                     >
                                         <Typography>
@@ -60,7 +61,7 @@ export default function AllUsers() {
                                                 Dirección:
                                             </span>
                                             <div className="rounded-md border border-green-400 p-3 mt-2">
-                                                <label>
+                                                <label className="capitalize">
                                                     {user.address?.addrType} {user.address?.streetName} Número {user.address?.streetNumber}
                                                 </label>
                                                 <br />
@@ -69,7 +70,7 @@ export default function AllUsers() {
                                                 </label>
                                                 <br />
                                                 <label>
-                                                    {user.address?.city?.postalCode.split(',')[0]}
+                                                    {user.address?.postalCode}
                                                 </label>
                                             </div>
                                         </div>

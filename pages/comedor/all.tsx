@@ -59,7 +59,7 @@ export default function ComedorAll() {
                                                 </label>
                                                 <br />
                                                 <label>
-                                                    {com?.address?.city?.postalCode.split(',')[0]}
+                                                    {com?.address?.postalCode}
                                                 </label>
                                             </div>
                                         </div>

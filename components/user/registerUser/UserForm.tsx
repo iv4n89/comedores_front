@@ -3,13 +3,13 @@ import userApi from '@/api/user.api'
 import { FormControlBox } from '@/components/boxes/FormControlBox'
 import { TabPanel } from '@/components/tabs/TabPanel'
 import { CommPlace } from '@/interfaces/entity.interface'
-import { Box, Tabs, Tab, InputLabel, Select, MenuItem } from '@mui/material'
-import { watch } from 'fs'
+import { Box, InputLabel, Tab, Tabs } from '@mui/material'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { AddressInfo } from './AddressInfo'
-import { PersonalInfo } from './PersonalInfo'
+import { PersonalInfo } from './PersonalInfo';
+import Select from 'react-select';
 
 interface Props {
     type: 'create' | 'update';
@@ -51,7 +51,9 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
     }
 
     const [kitchens, setKitchens] = useState([] as CommPlace[]);
+    const kitchenOptions = () => kitchens.map(e => ({ value: e.id, label: e.name }));
     const [stores, setStores] = useState([] as CommPlace[]);
+    const storeOptions = () => stores.map(e => ({ value: e.id, label: e.name }));
     const [places, setPlaces] = useState({
         kitchen: 0,
         store: 0,
@@ -62,13 +64,16 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
     useEffect(() => {
         commPlaceApi.getKitchens().then(setKitchens);
         commPlaceApi.getStores().then(setStores);
-
-        if (type === 'update') {
-            if (defaultValue && defaultValue?.address?.state) {
-
+        if (defaultValue) {
+            if (defaultValue?.commPlaces) {
+                setPlaces({
+                    kitchen: defaultValue?.commPlaces?.find((e: CommPlace) => e.type === 'community kitchen')?.id ?? 0,
+                    store: defaultValue?.commPlaces?.find((e: CommPlace) => e.type === 'company store')?.id ?? 0,
+                })
             }
         }
     }, [])
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -109,15 +114,14 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                             alignItems: 'center',
                         }}
                     >
-                        <PersonalInfo control={control} defaultValue={defaultValue} />
+                        <PersonalInfo watch={watch} control={control} defaultValue={defaultValue} setValue={setValue} />
                     </Box>
                 </TabPanel>
                 <TabPanel value={tab} index={1}>
-                    <AddressInfo control={control} watch={watch} defaultValue={defaultValue?.address} />
+                    <AddressInfo control={control} watch={watch} defaultValue={defaultValue?.address} setValue={setValue} />
                 </TabPanel>
                 <TabPanel value={tab} index={2}>
                     <FormControlBox>
-                        <InputLabel id='come-id'>Comedor</InputLabel>
                         <Controller
                             name='kitchen'
                             control={control}
@@ -125,26 +129,23 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                                 ({ field }) => (
                                     <Select
                                         {...field}
-                                        label='Comedores'
-                                        labelId='com-id'
-                                        displayEmpty
-                                        color='secondary'
-                                        fullWidth
-                                        defaultValue={!!defaultValue && defaultValue?.commPlaces?.filter((p: CommPlace) => p.type === 'community kitchen').map((p: CommPlace) => p.id)}
-                                        value={places.kitchen}
-                                        onChange={e => setPlaces(p => ({ ...p, kitchen: Number(e.target.value) }))}
-                                        sx={{
-                                            width: '235px'
+                                        placeholder='Comedor'
+                                        options={kitchenOptions()}
+                                        styles={{
+                                            container: style => ({
+                                                ...style,
+                                                width: '235px'
+                                            })
                                         }}
-                                    >
-                                        {
-                                            kitchens.map(k => (
-                                                <MenuItem key={k.id} value={k.id}>
-                                                    {k.name}, {k.address?.streetName} {k.address?.streetNumber} <br /> {k.address?.city?.name}
-                                                </MenuItem>
-                                            ))
-                                        }
-                                    </Select>
+                                        onChange={e => {
+                                            setPlaces(a => ({
+                                                ...a,
+                                                kitchen: e!.value as number,
+                                            }))
+                                        }}
+                                        value={kitchenOptions().find(e => e.value === places.kitchen)}
+                                        className='z-40'
+                                    />
                                 )
                             }
                         />
@@ -158,26 +159,23 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                                 ({ field }) => (
                                     <Select
                                         {...field}
-                                        label='Economato'
-                                        labelId='sto-id'
-                                        displayEmpty
-                                        color='secondary'
-                                        fullWidth
-                                        defaultValue={!!defaultValue && defaultValue?.commPlaces?.filter((p: CommPlace) => p.type === 'company store').map((p: CommPlace) => p.id)}
-                                        value={places.store}
-                                        sx={{
-                                            width: '235px',
+                                        placeholder='Economato'
+                                        options={storeOptions()}
+                                        styles={{
+                                            container: style => ({
+                                                ...style,
+                                                width: '235px'
+                                            })
                                         }}
-                                        onChange={e => setPlaces(p => ({ ...p, store: Number(e.target.value) }))}
-                                    >
-                                        {
-                                            stores.map(s => (
-                                                <MenuItem key={s.id} value={s.id}>
-                                                    {s.name}, {s.address?.streetName} {s.address?.streetNumber} <br /> {s.address?.city?.name}
-                                                </MenuItem>
-                                            ))
-                                        }
-                                    </Select>
+                                        value={storeOptions().find(e => e.value === places.store)}
+                                        className='z-30'
+                                        onChange={e => {
+                                            setPlaces(a => ({
+                                                ...a,
+                                                store: e!.value as number,
+                                            }))
+                                        }}
+                                    />
                                 )
                             }
                         />
@@ -199,14 +197,8 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                     >
                         Enviar
                     </button>
-                    <pre>
-                        {JSON.stringify(watch(), null, 2)}
-                    </pre>
                 </div>
             </Box>
-            <pre>
-                {JSON.stringify(defaultValue, null, 2)}
-            </pre>
         </form>
     )
 }
