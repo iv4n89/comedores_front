@@ -10,10 +10,11 @@ import { Controller, useForm } from 'react-hook-form'
 import { AddressInfo } from './AddressInfo'
 import { PersonalInfo } from './PersonalInfo';
 import Select from 'react-select';
+import { User } from '@/interfaces/user.interface'
 
 interface Props {
     type: 'create' | 'update';
-    defaultValue?: any;
+    defaultValue?: User;
     callBack?: any;
 }
 
@@ -36,23 +37,6 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
     } = useForm();
     const { push } = useRouter();
     let onSubmit = (data: any) => console.log(data);
-
-    if (type === 'create') {
-        onSubmit = (data: any) => userApi
-            .createUser({
-                ...data,
-                places: [places.kitchen, places.store],
-            })
-            .then((res) => res!.status === 201 && push({ pathname: '/user/all' }));
-    } else if (type === 'update') {
-        onSubmit = (data: any) => userApi
-            .updateUser(defaultValue.id, {
-                ...data,
-                ...(places && { places: [places?.kitchen, places?.store] })
-            })
-            .then(() => callBack());
-    }
-
     const [kitchens, setKitchens] = useState([] as CommPlace[]);
     const kitchenOptions = () => kitchens.map(e => ({ value: e.id, label: e.name }));
     const [stores, setStores] = useState([] as CommPlace[]);
@@ -64,6 +48,35 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
 
     const [tab, setTab] = useState(0);
 
+    if (type === 'create') {
+        onSubmit = (data: any) => userApi
+            .createUser({
+                ...data,
+                places: [places.kitchen, places.store],
+            })
+            .then((res) => res!.status === 201 && push({ pathname: '/user/all' }));
+    } else if (type === 'update') {
+
+        let _pl: number[] = [];
+        if (places) {
+            if (places?.kitchen !== null || places?.kitchen !== undefined) {
+                _pl = [..._pl, places?.kitchen]
+                    .filter(p => !!p);
+            }
+            if (places?.store !== null || places?.store !== undefined) {
+                _pl = [..._pl, places?.store]
+                    .filter(p => !!p);
+            }
+        }
+
+        onSubmit = (data: any) => userApi
+            .updateUser(defaultValue?.id as number, {
+                ...data,
+                places: _pl,
+            })
+            .then(() => callBack());
+    }
+
     useEffect(() => {
         commPlaceApi.getKitchens().then(setKitchens);
         commPlaceApi.getStores().then(setStores);
@@ -74,6 +87,22 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                     store: defaultValue?.commPlaces?.find((e: CommPlace) => e.type === 'company store')?.id ?? 0,
                 })
             }
+            reset({
+                name: defaultValue?.name,
+                surname: defaultValue?.surname,
+                telNumber: defaultValue?.telNumber,
+                identityDoc: {
+                    docType: defaultValue?.identityDoc?.docType,
+                    idNumber: defaultValue?.identityDoc?.idNumber,
+                },
+                address: {
+                    state: defaultValue?.address?.state?.id,
+                    province: defaultValue?.address?.province?.id,
+                    city: defaultValue?.address?.city?.id,
+                    ...defaultValue?.address,
+                },
+                places: defaultValue?.places
+            } as Partial<User>)
         }
     }, [])
 
@@ -134,12 +163,14 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                             <Controller
                                 name='kitchen'
                                 control={control}
+                                rules={{ required: false }}
                                 render={
                                     ({ field }) => (
                                         <Select
                                             {...field}
                                             placeholder='Comedor'
                                             options={kitchenOptions()}
+                                            isClearable
                                             styles={{
                                                 container: style => ({
                                                     ...style,
@@ -149,7 +180,7 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                                             onChange={e => {
                                                 setPlaces(a => ({
                                                     ...a,
-                                                    kitchen: e!.value as number,
+                                                    kitchen: e?.value as number,
                                                 }))
                                             }}
                                             value={kitchenOptions().find(e => e.value === places.kitchen)}
@@ -166,12 +197,14 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                             <Controller
                                 name='store'
                                 control={control}
+                                rules={{ required: false }}
                                 render={
                                     ({ field }) => (
                                         <Select
                                             {...field}
                                             placeholder='Economato'
                                             options={storeOptions()}
+                                            isClearable
                                             styles={{
                                                 container: style => ({
                                                     ...style,
@@ -183,7 +216,7 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                                             onChange={e => {
                                                 setPlaces(a => ({
                                                     ...a,
-                                                    store: e!.value as number,
+                                                    store: e?.value as number,
                                                 }))
                                             }}
                                         />

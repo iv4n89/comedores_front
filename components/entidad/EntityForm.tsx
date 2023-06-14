@@ -297,6 +297,7 @@ export const EntityForm = ({ type = 'create', defaultValue, callBack }: Props) =
                                                                 width: '235px'
                                                             })
                                                         }}
+                                                        isClearable
                                                         isMulti
                                                         className='z-50'
                                                         options={comedoresOptions()}
@@ -321,6 +322,7 @@ export const EntityForm = ({ type = 'create', defaultValue, callBack }: Props) =
                                                     <Select
                                                         {...field}
                                                         isMulti
+                                                        isClearable
                                                         placeholder='Economatos'
                                                         styles={{
                                                             container: style => ({
