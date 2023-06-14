@@ -133,7 +133,7 @@ export default function ComedorAll() {
                         }
                     </Grid.Container>
                 </TypeBox>
-                <div className="mt-5 pb-10"></div>
+                <div className="mt-5"></div>
                 <TypeBox
                     backgroundColor="rgba(138, 19, 209, 0.4)"
                     label='Economatos'
@@ -155,6 +155,7 @@ export default function ComedorAll() {
                         }
                     </Grid.Container>
                 </TypeBox>
+                <div className="mb-10"></div>
             </Container>
         </Layout>
     )
