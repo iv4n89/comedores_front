@@ -110,7 +110,11 @@ export const PlaceRegister = ({ type = 'create', defaultValue, callBack }: Props
                     }}
                 >
                     <TabPanel value={tab} index={0}>
-                        <FormControlBox>
+                        <FormControlBox
+                            rowStyle={{
+                                marginBottom: '10px'
+                            }}
+                        >
                             <Controller
                                 control={control}
                                 name='name'
@@ -131,7 +135,11 @@ export const PlaceRegister = ({ type = 'create', defaultValue, callBack }: Props
                                 )
                             }
                         </FormControlBox>
-                        <FormControlBox>
+                        <FormControlBox
+                            rowStyle={{
+                                marginBottom: '10px'
+                            }}
+                        >
                             <Controller
                                 control={control}
                                 name='cif'
@@ -152,7 +160,11 @@ export const PlaceRegister = ({ type = 'create', defaultValue, callBack }: Props
                                 )
                             }
                         </FormControlBox>
-                        <FormControlBox>
+                        <FormControlBox
+                            rowStyle={{
+                                marginBottom: '10px'
+                            }}
+                        >
                             <Controller
                                 control={control}
                                 name='type'
@@ -185,7 +197,11 @@ export const PlaceRegister = ({ type = 'create', defaultValue, callBack }: Props
                                 )
                             }
                         </FormControlBox>
-                        <FormControlBox>
+                        <FormControlBox
+                            rowStyle={{
+                                marginBottom: '10px'
+                            }}
+                        >
                             <Controller
                                 name='telephone'
                                 control={control}
