@@ -108,7 +108,7 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                                         width: '235px'
                                     })
                                 }}
-                                defaultValue={statesOptions().find(e => e.value === defaultValue?.address?.state?.id)}
+                                defaultValue={statesOptions().find(e => e.value === defaultValue?.state?.id)}
                             />
                         )
                     }
@@ -142,7 +142,7 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                                         width: '235px'
                                     })
                                 }}
-                                defaultValue={provincesOptions().find(e => e.value === defaultValue?.address?.province?.id)}
+                                defaultValue={provincesOptions().find(e => e.value === defaultValue?.province?.id)}
                             />
                         )
                     }
@@ -176,7 +176,7 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                                         width: '235px'
                                     })
                                 }}
-                                defaultValue={citiesOptions().find(e => e.value === defaultValue?.address?.city?.id)}
+                                defaultValue={citiesOptions().find(e => e.value === defaultValue?.city?.id)}
                             />
                         )
                     }
