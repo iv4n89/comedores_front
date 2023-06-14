@@ -22,7 +22,8 @@ export const TypeBox = ({ children, backgroundColor, label }: Props) => {
                     borderRadius: '15px',
                     display: 'flex',
                     alignItems: 'center',
-                    backdropFilter: 'blur(5px)'
+                    backdropFilter: 'blur(5px)',
+                    minHeight: '400px',
                 }}
             >
                 <Typography
