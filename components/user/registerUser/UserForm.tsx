@@ -46,7 +46,10 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
             .then((res) => res!.status === 201 && push({ pathname: '/user/all' }));
     } else if (type === 'update') {
         onSubmit = (data: any) => userApi
-            .updateUser(defaultValue.id, data)
+            .updateUser(defaultValue.id, {
+                ...data,
+                ...(places && { places: [places?.kitchen, places?.store] })
+            })
             .then(() => callBack());
     }
 
@@ -87,117 +90,113 @@ export const UserForm = ({ type, defaultValue, callBack }: Props) => {
                 paddingBottom: '60px',
                 boxShadow: 1,
                 backgroundColor: 'white',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
             }}
             >
-                <Box sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                }}
-                >
-                    <Tabs
-                        textColor='secondary'
-                        indicatorColor='secondary'
-                        value={tab}
-                        onChange={(event, newValue) => setTab(newValue)}
+                <div>
+                    <Box sx={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}
                     >
-                        <Tab label="Datos personales" />
-                        <Tab label="Dirección" />
-                        <Tab label="Comedor/Economato" />
-                    </Tabs>
-                </Box>
-                <TabPanel value={tab} index={0}>
-                    <Box
-                        sx={{
-                            height: '400px',
-                            display: 'flex',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <PersonalInfo watch={watch} control={control} defaultValue={defaultValue} setValue={setValue} />
+                        <Tabs
+                            textColor='secondary'
+                            indicatorColor='secondary'
+                            value={tab}
+                            onChange={(event, newValue) => setTab(newValue)}
+                        >
+                            <Tab label="Datos personales" />
+                            <Tab label="Dirección" />
+                            <Tab label="Comedor/Economato" />
+                        </Tabs>
                     </Box>
-                </TabPanel>
-                <TabPanel value={tab} index={1}>
-                    <AddressInfo control={control} watch={watch} defaultValue={defaultValue?.address} setValue={setValue} />
-                </TabPanel>
-                <TabPanel value={tab} index={2}>
-                    <FormControlBox rowStyle={{
-                        marginBottom: '10px'
-                    }}>
-                        <Controller
-                            name='kitchen'
-                            control={control}
-                            render={
-                                ({ field }) => (
-                                    <Select
-                                        {...field}
-                                        placeholder='Comedor'
-                                        options={kitchenOptions()}
-                                        styles={{
-                                            container: style => ({
-                                                ...style,
-                                                width: '235px'
-                                            })
-                                        }}
-                                        onChange={e => {
-                                            setPlaces(a => ({
-                                                ...a,
-                                                kitchen: e!.value as number,
-                                            }))
-                                        }}
-                                        value={kitchenOptions().find(e => e.value === places.kitchen)}
-                                        className='z-40'
-                                    />
-                                )
-                            }
-                        />
-                    </FormControlBox>
-                    <FormControlBox rowStyle={{
-                        marginBottom: '10px'
-                    }}>
-                        <InputLabel id='sto-id'>Economato</InputLabel>
-                        <Controller
-                            name='store'
-                            control={control}
-                            render={
-                                ({ field }) => (
-                                    <Select
-                                        {...field}
-                                        placeholder='Economato'
-                                        options={storeOptions()}
-                                        styles={{
-                                            container: style => ({
-                                                ...style,
-                                                width: '235px'
-                                            })
-                                        }}
-                                        value={storeOptions().find(e => e.value === places.store)}
-                                        className='z-30'
-                                        onChange={e => {
-                                            setPlaces(a => ({
-                                                ...a,
-                                                store: e!.value as number,
-                                            }))
-                                        }}
-                                    />
-                                )
-                            }
-                        />
-                    </FormControlBox>
-                </TabPanel>
-                <div className="mb-3 pt-3 pl-28 absolute bottom-2">
-                    <button
-                        type='button'
-                        onClick={e => setTab(tab => tab < 2 ? tab + 1 : tab)}
-                        className='pt-2 pb-2 pl-3 pr-3 border rounded-lg bg-green-600 text-white font-bold shadow-lg hover:bg-purple-500 active:bg-purple-400 active:translate-y-2 transition-all ease-in-out duration-200'
-                        hidden={tab === 2}
-                    >
-                        Siguiente
-                    </button>
+                    <TabPanel value={tab} index={0}>
+                        <Box
+                            sx={{
+                                height: '400px',
+                                display: 'flex',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <PersonalInfo watch={watch} control={control} defaultValue={defaultValue} setValue={setValue} />
+                        </Box>
+                    </TabPanel>
+                    <TabPanel value={tab} index={1}>
+                        <AddressInfo control={control} watch={watch} defaultValue={defaultValue?.address} setValue={setValue} />
+                    </TabPanel>
+                    <TabPanel value={tab} index={2}>
+                        <FormControlBox rowStyle={{
+                            marginBottom: '10px'
+                        }}>
+                            <Controller
+                                name='kitchen'
+                                control={control}
+                                render={
+                                    ({ field }) => (
+                                        <Select
+                                            {...field}
+                                            placeholder='Comedor'
+                                            options={kitchenOptions()}
+                                            styles={{
+                                                container: style => ({
+                                                    ...style,
+                                                    width: '100%'
+                                                })
+                                            }}
+                                            onChange={e => {
+                                                setPlaces(a => ({
+                                                    ...a,
+                                                    kitchen: e!.value as number,
+                                                }))
+                                            }}
+                                            value={kitchenOptions().find(e => e.value === places.kitchen)}
+                                            className='z-40'
+                                        />
+                                    )
+                                }
+                            />
+                        </FormControlBox>
+                        <FormControlBox rowStyle={{
+                            marginBottom: '10px'
+                        }}>
+                            <InputLabel id='sto-id'>Economato</InputLabel>
+                            <Controller
+                                name='store'
+                                control={control}
+                                render={
+                                    ({ field }) => (
+                                        <Select
+                                            {...field}
+                                            placeholder='Economato'
+                                            options={storeOptions()}
+                                            styles={{
+                                                container: style => ({
+                                                    ...style,
+                                                    width: '100%'
+                                                })
+                                            }}
+                                            value={storeOptions().find(e => e.value === places.store)}
+                                            className='z-30'
+                                            onChange={e => {
+                                                setPlaces(a => ({
+                                                    ...a,
+                                                    store: e!.value as number,
+                                                }))
+                                            }}
+                                        />
+                                    )
+                                }
+                            />
+                        </FormControlBox>
+                    </TabPanel>
+                </div>
+                <div className="flex justify-center">
                     <button
                         type='submit'
-                        hidden={tab !== 2}
-                        className='pt-2 pb-2 pl-3 pr-3 border rounded-lg bg-green-600 text-white font-bold shadow-lg hover:bg-purple-500 active:bg-purple-400 active:translate-y-2 transition-all ease-in-out duration-200'
+                        className='w-64 pt-2 pb-2 pl-3 pr-3 border rounded-lg bg-green-600 text-white font-bold shadow-lg hover:bg-purple-500 active:bg-purple-400 active:translate-y-2 transition-all ease-in-out duration-200'
                     >
                         Enviar
                     </button>

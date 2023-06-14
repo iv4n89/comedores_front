@@ -16,7 +16,9 @@ export const CustomCard = ({ header, body, handleClick }: Props) => {
             <Card.Header
                 style={{
                     backgroundColor: 'lightgreen',
-                    margin: 0
+                    margin: 0,
+                    display: 'flex',
+                    justifyContent: 'space-between',
                 }}
             >
                 { header }

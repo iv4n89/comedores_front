@@ -1,16 +1,20 @@
 import userApi from "@/api/user.api";
 import { Layout } from "@/base/Layout";
+import { DeleteButton } from "@/components/buttons/DeleteButton";
+import { DeleteModal } from "@/components/modals/DeleteModal";
 import { UserForm } from "@/components/user/registerUser/UserForm";
 import { User } from "@/interfaces/user.interface";
 import { Typography } from "@mui/material";
 import { Card, Container, Grid, Modal, Text } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { BsFillTrashFill } from 'react-icons/bs';
 
 export default function AllUsers() {
 
     const [users, setUsers] = useState([] as User[]);
     const [modalOpen, setModalOpen] = useState(false);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const { control, watch, handleSubmit } = useForm();
     const [editUser, setEditUser] = useState({} as User);
     useEffect(() => {
@@ -27,10 +31,6 @@ export default function AllUsers() {
                                 <Card
                                     isHoverable
                                     isPressable
-                                    onClick={() => {
-                                        setModalOpen(true);
-                                        setEditUser(user);
-                                    }}
                                 >
                                     <Card.Header
                                         style={{
@@ -40,11 +40,27 @@ export default function AllUsers() {
                                             justifyContent: 'space-between'
                                         }}
                                     >
-                                        <Typography>
+                                        <Typography
+                                            onClick={() => {
+                                                setModalOpen(true);
+                                                setEditUser(user);
+                                            }}
+                                        >
                                             {user.name} {user.surname}
                                         </Typography>
+                                        <DeleteButton
+                                            callBack={() => {
+                                                setDeleteModalOpen(true);
+                                                setEditUser(user);
+                                            }}
+                                        />
                                     </Card.Header>
-                                    <Card.Body>
+                                    <Card.Body
+                                        onClick={() => {
+                                            setModalOpen(true);
+                                            setEditUser(user);
+                                        }}
+                                    >
                                         <div>
                                             <Typography>
                                                 {
@@ -117,6 +133,18 @@ export default function AllUsers() {
                                         />
                                     </Modal.Body>
                                 </Modal>
+                                <DeleteModal
+                                    open={deleteModalOpen}
+                                    setOpen={setDeleteModalOpen}
+                                    object={editUser}
+                                    callBack={async () => {
+                                        await userApi.deleteUser(editUser.id);
+                                        const usrs = await userApi.getAllUsers();
+                                        setUsers(usrs);
+                                        setDeleteModalOpen(false)
+                                    }}
+                                    text={`¿Desea borrar al beneficiario ${editUser.name} ${editUser.surname}?`}
+                                />
                             </Grid>
                         ))
                     }

@@ -13,9 +13,9 @@ interface Props {
     defaultValue?: Partial<Address>;
 }
 
-const options = ['calle', 'plaza', 'via', 'paseo', 'avenida'].map(e => ({
+const options = ['calle', 'plaza', 'via', 'paseo', 'avenida', 'polígono industrial', 'carretera', 'calzada', 'callejón', 'bulevar'].map(e => ({
     value: e,
-    label: e.charAt(0).toUpperCase() + e.substring(1),
+    label: e.split(' ').map(a => a.charAt(0).toUpperCase() + a.substring(1)).join(' '),
 }));
 
 export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) => {

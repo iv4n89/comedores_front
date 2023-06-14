@@ -9,6 +9,7 @@ export interface Entity {
     applicableRate: 0.5 | 0.75 | 2.5;
     person?: EntityResponsiblePerson;
     commPlaces?: CommPlace[];
+    places?: number[];
     createdAt?: Date;
     updatedAt?: Date;
     deletedAt?: Date;
@@ -37,6 +38,7 @@ export interface CommPlace {
     name?: string;
     cif: string;
     type?: CommPlaceType;
+    telephone?: string;
     address?: Address;
     entity?: Entity[];
     responsiblePerson?: number | EntityResponsiblePerson;

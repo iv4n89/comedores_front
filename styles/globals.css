@@ -10,3 +10,28 @@ html {
     background-position: center;
     background-attachment: fixed;
 }
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(100, 100, 100, 0.8) rgba(100, 100, 100, 1);
+  }
+
+  /* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+*::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 5px;
+  }
+  
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.8);
+    border-radius: 5px;
+  }
+  
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 100, 100, 1);
+  }
