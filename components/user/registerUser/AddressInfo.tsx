@@ -52,7 +52,7 @@ export const AddressInfo = ({ control, watch, setValue, defaultValue }: Props) =
                                                             width: '235px'
                                                         })
                                                     }}
-                                                    value={options.find(o => o === watch()?.address?.addrType)}
+                                                    value={options.find(o => o?.value === watch()?.address?.addrType)}
                                                     defaultValue={options.find(o => o.value === defaultValue?.addrType)}
                                                 />
                                             )

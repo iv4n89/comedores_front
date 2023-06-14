@@ -99,7 +99,7 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                                         state: e!.value,
                                     }))
                                 }}
-                                value={statesOptions().find(e => e.value === address.state)}
+                                value={statesOptions().find(e => e.value === watch()?.address?.state)}
                                 placeholder='Comunidad autónoma'
                                 className='z-50'
                                 styles={{
@@ -133,7 +133,7 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                                         province: e!.value,
                                     }))
                                 }}
-                                value={provincesOptions().find(e => e.value === address.province)}
+                                value={provincesOptions().find(e => e.value === watch()?.address?.province)}
                                 className='z-40'
                                 placeholder='Provincia'
                                 styles={{
@@ -167,7 +167,7 @@ export const AddressSelects = ({ control, watch, setValue, defaultValue }: Props
                                         city: e!.value,
                                     }))
                                 }}
-                                value={citiesOptions().find(e => e.value === address.city)}
+                                value={citiesOptions().find(e => e.value === watch()?.address?.city)}
                                 className='z-30'
                                 placeholder='Ciudad'
                                 styles={{
